@@ -7,18 +7,13 @@ const dialog = document.querySelector(".work-dialog");
 const dialogTitle = document.querySelector("#dialog-title");
 const dialogText = document.querySelector("#dialog-text");
 const closeDialog = document.querySelector(".dialog-close");
-const videoStack = document.querySelector(".video-stack");
-const videoItems = Array.from(document.querySelectorAll(".video-stage video"));
-const videoDots = Array.from(document.querySelectorAll(".video-dot"));
-const videoPrev = document.querySelector("[data-video-prev]");
-const videoNext = document.querySelector("[data-video-next]");
 const pageVideos = Array.from(document.querySelectorAll("video"));
-let activeVideoIndex = 0;
+const analysisCards = Array.from(document.querySelectorAll(".analysis-card"));
 
 const workCopy = {
   "ai-video": {
     title: "AI 生成视频与短剧片段",
-    text: "这个系列集中呈现我在 AI 视频生成和短剧片段制作中的完整链路能力：从脚本理解、分镜拆解、Prompt 设计、素材生成，到剪辑包装和成片优化，也体现了我对模板沉淀、内容结构和用户使用场景的理解。"
+    text: "这个作品集中展示了我围绕 AI 短剧内容生产的完整实践：从脚本理解、分镜拆解、Prompt 设计、素材生成，到剪辑包装和成片优化，也体现了我把内容能力延伸到 AI 产品理解和用户体验观察中的方式。"
   }
 };
 
@@ -35,37 +30,6 @@ const setActiveLink = () => {
   navLinks.forEach((link) => {
     link.classList.toggle("is-active", link.getAttribute("href") === `#${activeId}`);
   });
-};
-
-const updateVideoStack = (nextIndex) => {
-  if (!videoItems.length) return;
-
-  activeVideoIndex = (nextIndex + videoItems.length) % videoItems.length;
-
-  videoItems.forEach((video, index) => {
-    video.classList.remove("is-active", "is-next", "is-back");
-    video.pause();
-
-    const offset = (index - activeVideoIndex + videoItems.length) % videoItems.length;
-    if (offset === 0) {
-      video.classList.add("is-active");
-      video.removeAttribute("tabindex");
-    } else if (offset === 1) {
-      video.classList.add("is-next");
-      video.setAttribute("tabindex", "-1");
-    } else {
-      video.classList.add("is-back");
-      video.setAttribute("tabindex", "-1");
-    }
-  });
-
-  videoDots.forEach((dot, index) => {
-    dot.classList.toggle("is-active", index === activeVideoIndex);
-  });
-};
-
-const shiftVideo = (direction) => {
-  updateVideoStack(activeVideoIndex + direction);
 };
 
 const pauseOtherVideos = (currentVideo) => {
@@ -102,23 +66,38 @@ dialog?.addEventListener("click", (event) => {
   }
 });
 
-videoPrev?.addEventListener("click", () => shiftVideo(-1));
-videoNext?.addEventListener("click", () => shiftVideo(1));
-
-videoDots.forEach((dot) => {
-  dot.addEventListener("click", () => {
-    updateVideoStack(Number(dot.dataset.videoIndex));
-  });
-});
-
 pageVideos.forEach((video) => {
   video.addEventListener("play", () => {
     pauseOtherVideos(video);
   });
 });
 
-window.addEventListener("scroll", setActiveLink, { passive: true });
-window.addEventListener("load", () => {
-  setActiveLink();
-  updateVideoStack(0);
+analysisCards.forEach((card) => {
+  const toggle = card.querySelector(".analysis-toggle");
+  const panel = card.querySelector(".analysis-panel");
+
+  if (!toggle || !panel) return;
+
+  toggle.addEventListener("click", () => {
+    const isOpen = toggle.getAttribute("aria-expanded") === "true";
+
+    analysisCards.forEach((otherCard) => {
+      const otherToggle = otherCard.querySelector(".analysis-toggle");
+      const otherPanel = otherCard.querySelector(".analysis-panel");
+      if (!otherToggle || !otherPanel) return;
+
+      otherToggle.setAttribute("aria-expanded", "false");
+      otherPanel.hidden = true;
+      otherCard.classList.remove("is-open");
+    });
+
+    if (!isOpen) {
+      toggle.setAttribute("aria-expanded", "true");
+      panel.hidden = false;
+      card.classList.add("is-open");
+    }
+  });
 });
+
+window.addEventListener("scroll", setActiveLink, { passive: true });
+window.addEventListener("load", setActiveLink);
