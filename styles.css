@@ -482,6 +482,11 @@ mark {
   background: #f8fbff;
 }
 
+.analysis .section-title.centered h2,
+.works .section-title.centered h2 {
+  font-size: clamp(34px, 4.8vw, 64px);
+}
+
 .analysis-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -752,18 +757,6 @@ mark {
   color: #fff;
 }
 
-.results .section-title,
-.works .section-title,
-.project-block,
-.work-showcase,
-.asset-gallery,
-.motion-grid,
-.results-grid {
-  width: min(100%, 1100px);
-  margin-right: auto;
-  margin-left: auto;
-}
-
 .results .section-title p {
   color: #b7becb;
 }
@@ -808,20 +801,28 @@ mark {
   background: #fff;
 }
 
+.works .section-title.centered,
+.works .portfolio-section .section-title.compact {
+  max-width: 1320px;
+  margin-right: 0;
+  margin-left: 0;
+  text-align: left;
+}
+
+.works .section-title.centered p,
+.works .portfolio-section .section-title.compact p {
+  max-width: 980px;
+  margin-right: 0;
+  margin-left: 0;
+}
+
 .project-block {
   margin-bottom: 54px;
 }
 
-.project-block .section-title.compact {
-  max-width: 920px;
-  margin-right: auto;
-  margin-left: auto;
-}
-
 .project-block .section-title.compact h2,
-.works .section-title.centered h2,
 .results .section-title.centered h2 {
-  font-size: clamp(34px, 5.2vw, 76px);
+  font-size: clamp(34px, 5vw, 66px);
 }
 
 .project-layout {
@@ -1037,13 +1038,17 @@ mark {
   display: grid;
   grid-template-columns: minmax(320px, 0.9fr) minmax(320px, 1fr);
   gap: clamp(34px, 8vw, 96px);
+  align-items: start;
   padding-top: 100px;
   padding-bottom: 100px;
+  padding-right: clamp(32px, 5vw, 88px);
+  padding-left: clamp(32px, 5vw, 88px);
   background: var(--black);
   color: #fff;
 }
 
 .experience-copy {
+  max-width: 680px;
   position: sticky;
   top: 150px;
   align-self: start;
@@ -1253,15 +1258,6 @@ mark {
     position: static;
   }
 
-  .results .section-title,
-  .works .section-title,
-  .project-block,
-  .work-showcase,
-  .asset-gallery,
-  .motion-grid,
-  .results-grid {
-    width: 100%;
-  }
 }
 
 @media (max-width: 700px) {
@@ -1319,6 +1315,18 @@ mark {
 
   h2 {
     font-size: clamp(38px, 13vw, 62px);
+  }
+
+  .analysis .section-title.centered h2,
+  .works .section-title.centered h2,
+  .project-block .section-title.compact h2,
+  .results .section-title.centered h2 {
+    font-size: clamp(34px, 11vw, 54px);
+  }
+
+  .works .section-title.centered,
+  .works .portfolio-section .section-title.compact {
+    max-width: none;
   }
 
   .hero-name {
