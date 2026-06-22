@@ -74,28 +74,23 @@ pageVideos.forEach((video) => {
 
 analysisCards.forEach((card) => {
   const toggle = card.querySelector(".analysis-toggle");
-  const panel = card.querySelector(".analysis-panel");
-
-  if (!toggle || !panel) return;
+  if (!toggle) return;
 
   toggle.addEventListener("click", () => {
-    const isOpen = toggle.getAttribute("aria-expanded") === "true";
-
-    analysisCards.forEach((otherCard) => {
-      const otherToggle = otherCard.querySelector(".analysis-toggle");
-      const otherPanel = otherCard.querySelector(".analysis-panel");
-      if (!otherToggle || !otherPanel) return;
-
-      otherToggle.setAttribute("aria-expanded", "false");
-      otherPanel.hidden = true;
-      otherCard.classList.remove("is-open");
+    const shouldOpenAll = !analysisCards.every((item) => {
+      const itemToggle = item.querySelector(".analysis-toggle");
+      return itemToggle?.getAttribute("aria-expanded") === "true";
     });
 
-    if (!isOpen) {
-      toggle.setAttribute("aria-expanded", "true");
-      panel.hidden = false;
-      card.classList.add("is-open");
-    }
+    analysisCards.forEach((item) => {
+      const itemToggle = item.querySelector(".analysis-toggle");
+      const itemPanel = item.querySelector(".analysis-panel");
+      if (!itemToggle || !itemPanel) return;
+
+      itemToggle.setAttribute("aria-expanded", shouldOpenAll ? "true" : "false");
+      itemPanel.hidden = !shouldOpenAll;
+      item.classList.toggle("is-open", shouldOpenAll);
+    });
   });
 });
 
